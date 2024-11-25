@@ -15,26 +15,26 @@
                     </div>
 
                     <h1 class="text-center">Register Here !!</h1>
-                    <form th:action="@{/do-register}" method="post">
+                    <form th:action="@{/do-register}" method="post" th:object="${user}">
                         <div class="mb-3">
                             <label for="name" class="form-label">Name</label>
-                            <input type="text" class="form-control" id="name" placeholder="Enter your name">
+                            <input type="text" name="name" class="form-control" id="name" th:value="${user.name}" placeholder="Enter your name">
                         </div>
                         <div class="mb-3">
                             <label for="email" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="email" placeholder="Enter your email">
+                            <input type="email" name="email" class="form-control" id="email" th:value="${user.email}" placeholder="Enter your email">
                         </div>
                         <div class="mb-3">
                             <label for="password" class="form-label">Password</label>
-                            <input type="password" class="form-control" id="password" placeholder="Enter your password">
+                            <input type="password" name="password" class="form-control" id="password" th:value="${user.password}" placeholder="Enter your password">
                         </div>
                         <div class="mb-3">
                             <label for="about">About</label>
-                            <textarea class="form-control" rows="6" placeholder="about your self" id="about"></textarea>
+                            <textarea name="about" th:value="user.about" class="form-control" rows="6" placeholder="about your self" id="about"></textarea>
                         </div>
                         <div class="mb-3 form-check">
-                            <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                            <label class="form-check-label" for="exampleCheck1">Check me out</label>
+                            <input type="checkbox" name="agreement" class="form-check-input" id="agreement">
+                            <label class="form-check-label" for="agreement">Accept terms and conditions</label>
                         </div>
                         <div class="container text-center">
                             <button type="submit" class="btn btn-primary d-block mb-2 w-100">Submit</button>
