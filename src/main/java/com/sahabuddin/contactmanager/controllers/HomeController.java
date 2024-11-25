@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -31,18 +32,29 @@ public class HomeController {
     }
 
     @GetMapping(value = "/signup")
-    public String signup(Model model) {
+    public String signup(Model model, HttpSession session) {
+        session.removeAttribute("message");
         model.addAttribute("title", "Sign up | Contact Manager");
         model.addAttribute("user", new User());
         return "signup";
     }
 
     @PostMapping(value = "/do-register")
-    public String userSignup(@ModelAttribute("user") User user, @RequestParam(value = "agreement", defaultValue = "false") boolean agreement, Model model, HttpSession session) {
+    public String userSignup(@ModelAttribute("user") User user, @RequestParam(value = "agreement", defaultValue = "false") boolean agreement, Model model, HttpSession session, BindingResult result) {
+        session.removeAttribute("message");
         try{
             if (!agreement) {
-                log.info("Agreement not available");
+                log.error("You have not agreed the terms and conditions");
+                throw new IllegalArgumentException("You have not agreed the terms and conditions");
             }
+
+            if (result.hasErrors()) {
+                log.error("Error: {}", result.toString());
+                model.addAttribute("title", "Sign up | Contact Manager");
+                model.addAttribute("user", user);
+                return "signup";
+            }
+
             model.addAttribute("title", "Sign up | Contact Manager");
             user.setRole("ROLE_USER");
             user.setEnabled(true);
@@ -59,9 +71,8 @@ public class HomeController {
         } catch (Exception e){
             model.addAttribute("title", "Sign up | Contact Manager");
             model.addAttribute("user", new User());
-            model.addAttribute("error", e.getMessage());
             log.error("error: {}", e.getMessage());
-            session.setAttribute("message", new Message("Something went wrong!"+e.getMessage(), "alert-error"));
+            session.setAttribute("message", new Message("Something went wrong!"+e.getMessage(), "alert-danger"));
         }
         return "signup";
     }

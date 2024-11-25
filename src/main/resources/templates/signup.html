@@ -10,6 +10,9 @@
         <div class="row">
             <div class="col-md-8 offset-md-2">
                 <div class="my-card">
+                    <div th:if="${session.message}"  th:classappend="${session.message.type}" class="alert alert-primary" role="alert">
+                       <span class="text-center" th:text="${session.message.content}"></span>
+                    </div>
                     <div class="container text-center">
                         <img style="width: 80px" th:src="@{/images/membership.png}"/>
                     </div>
@@ -18,15 +21,19 @@
                     <form th:action="@{/do-register}" method="post" th:object="${user}">
                         <div class="mb-3">
                             <label for="name" class="form-label">Name</label>
-                            <input type="text" name="name" class="form-control" id="name" th:value="${user.name}" placeholder="Enter your name">
+                            <input type="text" th:classappend="${#fields.hasErrors('name')?'is-invalid':''}" name="name" class="form-control" id="name" th:value="${user.name}" placeholder="Enter your name">
+                            <div class="invalid-feedback">Example invalid feedback text</div>
+                            <small style="color: red" th:if="${#fields.hasErrors('name')}" th:errorclass="error" th:errors="*{name}"></small>
                         </div>
                         <div class="mb-3">
                             <label for="email" class="form-label">Email</label>
                             <input type="email" name="email" class="form-control" id="email" th:value="${user.email}" placeholder="Enter your email">
+                            <small style="color: red" th:if="${#fields.hasErrors('email')}" th:errorclass="error" th:errors="*{email}"></small>
                         </div>
                         <div class="mb-3">
                             <label for="password" class="form-label">Password</label>
                             <input type="password" name="password" class="form-control" id="password" th:value="${user.password}" placeholder="Enter your password">
+                            <small style="color: red" th:if="${#fields.hasErrors('password')}" th:errorclass="error" th:errors="*{password}"></small>
                         </div>
                         <div class="mb-3">
                             <label for="about">About</label>

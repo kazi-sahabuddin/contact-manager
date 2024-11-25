@@ -1,6 +1,8 @@
 package com.sahabuddin.contactmanager.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -15,11 +17,17 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @NotBlank(message = "Name is required")
+    @Size(min = 3, max = 50)
     private String name;
 
+    @NotBlank(message = "Email is required")
+    @Size(max = 100)
     @Column(unique = true)
     private String email;
 
+    @NotBlank(message = "Password is required")
+    @Size(min = 6, max = 50)
     private String password;
 
     @Column(length = 500)
