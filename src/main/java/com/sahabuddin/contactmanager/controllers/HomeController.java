@@ -5,6 +5,7 @@ import com.sahabuddin.contactmanager.helper.Message;
 import com.sahabuddin.contactmanager.respositories.UserRepository;
 import com.sahabuddin.contactmanager.services.UserService;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -39,14 +40,19 @@ public class HomeController {
         return "signup";
     }
 
-    @PostMapping(value = "/do-register")
-    public String userSignup(@ModelAttribute("user") User user, @RequestParam(value = "agreement", defaultValue = "false") boolean agreement, Model model, HttpSession session, BindingResult result) {
+    @PostMapping(value = "/signup")
+    public String userSignup(@Valid @ModelAttribute("user") User user,BindingResult result, @RequestParam(value = "agreement", defaultValue = "false") boolean agreement,  Model model, HttpSession session) {
         session.removeAttribute("message");
         try{
             if (!agreement) {
                 log.error("You have not agreed the terms and conditions");
                 throw new IllegalArgumentException("You have not agreed the terms and conditions");
             }
+
+            result.getAllErrors().forEach(error -> {
+                System.out.println("Error: " + error.getDefaultMessage());
+            });
+
 
             if (result.hasErrors()) {
                 log.error("Error: {}", result.toString());
@@ -65,14 +71,14 @@ public class HomeController {
             log.info("agreement: {}", agreement);
 
             model.addAttribute("user", new User());
-            session.setAttribute("message", new Message("Registration successfully !", "alert-success"));
+            session.setAttribute("message", new Message("Registration successfully! ", "alert-success"));
 
 
         } catch (Exception e){
             model.addAttribute("title", "Sign up | Contact Manager");
             model.addAttribute("user", new User());
             log.error("error: {}", e.getMessage());
-            session.setAttribute("message", new Message("Something went wrong!"+e.getMessage(), "alert-danger"));
+            session.setAttribute("message", new Message("Something went wrong! "+e.getMessage(), "alert-danger"));
         }
         return "signup";
     }
