@@ -23,21 +23,16 @@
                             <label for="name" class="form-label">Name</label>
                             <input type="text" th:field="*{name}" name="name" th:classappend="${#fields.hasErrors('name') ?'is-invalid': (user.name !=null && user.name !='' ? 'is-valid':'')}"  class="form-control" id="name" th:value="${user.name}" placeholder="Enter your name">
 
-                            <div class="invalid-feedback" th:if="${#fields.hasErrors('name')}" th:errorclass="error" th:errors="*{name}">
-
-                            </div>
-                            <div class="valid-feedback" th:if="${!#fields.hasErrors('name')}">
-                                Looks good!
-                            </div>
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('name')}" th:errorclass="error" th:errors="*{name}"></div>
                         </div>
                         <div class="mb-3">
                             <label for="email" class="form-label">Email</label>
-                            <input type="email" name="email" th:classappend="${#fields.hasErrors('email') ?'is-invalid':''}" class="form-control" id="email" th:field="*{email}" th:value="${user.email}" placeholder="Enter your email">
+                            <input type="email" name="email" th:classappend="${#fields.hasErrors('email') ?'is-invalid':(user.email !=null && user.email !='' ? 'is-valid':'')}" class="form-control" id="email" th:field="*{email}" th:value="${user.email}" placeholder="Enter your email">
                             <div class="invalid-feedback" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
                         </div>
                         <div class="mb-3">
                             <label for="password" class="form-label">Password</label>
-                            <input type="password" name="password" th:classappend="${#fields.hasErrors('password')? 'is-invalid':''}" class="form-control" id="password" th:field="*{password}" th:value="${user.password}" placeholder="Enter your password">
+                            <input type="password" name="password" th:classappend="${#fields.hasErrors('password')? 'is-invalid':(user.password !=null && user.password !='' ? 'is-valid':'')}" class="form-control" id="password" th:field="*{password}" th:value="${user.password}" placeholder="Enter your password">
                             <div class="invalid-feedback" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
                         </div>
                         <div class="mb-3">
@@ -45,7 +40,7 @@
                             <textarea name="about" th:field="*{about}" th:value="user.about" class="form-control" rows="6" placeholder="about your self" id="about"></textarea>
                         </div>
                         <div class="mb-3 form-check">
-                            <input type="checkbox" name="agreement" class="form-check-input" id="agreement">
+                            <input type="checkbox" name="agreement" class="form-check-input" id="agreement" th:checked="${isAgreed}">
                             <label class="form-check-label" for="agreement">Accept terms and conditions</label>
                         </div>
                         <div class="container text-center">

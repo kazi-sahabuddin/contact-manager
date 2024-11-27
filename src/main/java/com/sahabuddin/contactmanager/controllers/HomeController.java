@@ -49,15 +49,11 @@ public class HomeController {
                 throw new IllegalArgumentException("You have not agreed the terms and conditions");
             }
 
-            result.getAllErrors().forEach(error -> {
-                System.out.println("Error: " + error.getDefaultMessage());
-            });
-
-
             if (result.hasErrors()) {
                 log.error("Error: {}", result.toString());
                 model.addAttribute("title", "Sign up | Contact Manager");
                 model.addAttribute("user", user);
+                model.addAttribute("isAgreed", agreement);
                 return "signup";
             }
 
