@@ -22,13 +22,14 @@
                     <a class="nav-link active" aria-current="page" th:href="@{/home}">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/about}">About</a>
+                    <a href="#" class="nav-link"><span th:text="${me.name}"></span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/sign-in}" >Sing In</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" th:href="@{/signup}">Signup</a>
+
+                    <form th:action="@{/logout}" method="post">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                        <button class="nav-link" type="submit">Logout</button>
+                    </form>
                 </li>
             </ul>
         </div>

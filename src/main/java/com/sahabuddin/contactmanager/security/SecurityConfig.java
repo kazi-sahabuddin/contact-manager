@@ -12,6 +12,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import static com.sahabuddin.contactmanager.constants.AppConstant.SIGN_IN_URL;
+
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -30,11 +32,16 @@ public class SecurityConfig {
                             .requestMatchers("/**").permitAll()
                 )
                 .formLogin(form -> form
-                        .loginPage("/sign-in")
+                        .loginPage(SIGN_IN_URL)
+                        .loginProcessingUrl(SIGN_IN_URL)
+                        .defaultSuccessUrl("/user/index")
+                        .failureUrl("/sign-in?error=true")
                         .permitAll())
                 .logout(logout -> logout
-                        .logoutUrl("/logout")
-                        .logoutSuccessUrl("/sign-in"));
+                        .logoutUrl("/logout")              // Only responds to POST requests
+                        .logoutSuccessUrl(SIGN_IN_URL)      // Redirect after successful logout
+                        .invalidateHttpSession(true)       // Invalidate session
+                        .deleteCookies("JSESSIONID"));
 
         return http.build();
     }
