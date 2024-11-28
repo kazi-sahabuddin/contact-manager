@@ -2,12 +2,13 @@ package com.sahabuddin.contactmanager.controllers;
 
 import com.sahabuddin.contactmanager.entities.User;
 import com.sahabuddin.contactmanager.helper.Message;
+import com.sahabuddin.contactmanager.models.requests.SignInRequest;
 import com.sahabuddin.contactmanager.respositories.UserRepository;
-import com.sahabuddin.contactmanager.services.UserService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -20,7 +21,9 @@ public class HomeController {
 
     private final UserRepository userRepository;
 
-    @GetMapping(value = "/home")
+    private final PasswordEncoder passwordEncoder;
+
+    @GetMapping(value = {"/","/home"})
     public String home(Model model) {
         model.addAttribute("title", "Home | Contact Manager");
         return "home";
@@ -61,6 +64,8 @@ public class HomeController {
             user.setRole("ROLE_USER");
             user.setEnabled(true);
             user.setImageUrl("default.png");
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            log.info("User: {}", user);
             User saved = userRepository.save(user);
             log.info("User registered successfully {}", saved);
             log.info("user info: {}", user.toString());
@@ -78,4 +83,23 @@ public class HomeController {
         }
         return "signup";
     }
+
+    @GetMapping(value = "/sign-in")
+    public String singIn(Model model){
+        model.addAttribute("title", "Login | Contact Manager");
+        return "login";
+    }
+
+//    @PostMapping(value = "/sign-in")
+//    public String signInPost(@Valid @ModelAttribute("signInRequest") SignInRequest signInRequest, BindingResult result, Model model, HttpSession session ) {
+//        session.removeAttribute("message");
+//        if (result.hasErrors()) {
+//            return "login";
+//        }
+//        log.info("Sign in request: {}", signInRequest);
+//        model.addAttribute("title", "Login | Contact Manager");
+//        model.addAttribute("signInRequest", new SignInRequest());
+//        return "login";
+//
+//    }
 }
