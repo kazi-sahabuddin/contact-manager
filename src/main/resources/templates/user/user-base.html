@@ -23,7 +23,7 @@
                     <a class="nav-link active" aria-current="page" th:href="@{/home}">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link"><span th:text="${me.name}"></span></a>
+                    <a href="#" class="nav-link"><span th:text="${user.name}"></span></a>
                 </li>
                 <li class="nav-item">
 
@@ -42,13 +42,21 @@
 
     <span onclick="toggleSidebar()" class="crossBtn">&times;</span>
 
-    <a href="#" class="item"> <i class="bi bi-house-fill"></i> Home</a>
+    <a href="#" th:href="@{/user/index}" class="item"> <i class="bi bi-house-fill"></i> Home</a>
     <a href="#" class="item"> <i class="bi bi-journal-text"></i> View Contacts</a>
-    <a href="#" class="item"> <i class="bi bi-plus-circle-fill"></i> Add Contact</a>
+    <a href="#" th:href="@{/user/add-contact}" class="item"> <i class="bi bi-plus-circle-fill"></i> Add Contact</a>
     <a href="#" class="item"> <i class="bi bi-pencil-square"></i> Update Contact</a>
     <a href="#" class="item"> <i class="bi bi-person-circle"></i> Your Profile</a>
     <a href="#" class="item"> <i class="bi bi-gear-wide-connected"></i> Settings</a>
-    <a href="#" class="item"> <i class="bi bi-box-arrow-right"></i> Sign Out</a>
+    <a href="#" class="item" onclick="document.getElementById('sign-out-form').submit(); return false;">
+        <i class="bi bi-box-arrow-right"></i>
+        Sign Out
+    </a>
+
+    <form th:action="@{/logout}" method="post" id="sign-out-form">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+    </form>
+
 
     <div class="divider"></div>
 </div>
