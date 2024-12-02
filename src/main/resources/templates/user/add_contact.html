@@ -6,21 +6,70 @@
 </head>
 <body>
 <section>
-  <div class="container">
-    <div class="row">
-      <div class="col-md-8 offset-md-2">
-        <div class="my-card">
-          <div class="container text-center">
-            <img style="width: 80px" th:src="@{/images/profile.png}" alt="user picture"/>
+    <div class="card mr-3">
+      <div class="card-body">
+        <h1 class="text-center card-title">Add Contact</h1>
+
+        <div class="container-fluid mt-1">
+          <div class="row">
+            <div class="col-md-10 offset-md-1">
+              <form action="#" class="mt-2" th:action="@{/user/add-contact}" method="post"
+                    enctype="multipart/form-data" th:object="${contact}">
+                <div class="input-group mt-3">
+                    <span class="input-group-text mr-3">
+                      <i class="bi bi-person-vcard-fill"></i>
+                    </span>
+                  <input type="text" name="name" id="name" class="form-control" placeholder="Enter Name">
+                </div>
+
+                <div class="input-group mt-3">
+                    <span class="input-group-text mr-3">
+                      <i class="bi bi-person-fill"></i>
+                    </span>
+                  <input type="text" name="nickName" id="nickName" class="form-control" placeholder="Enter Nick Name">
+                </div>
+
+                <div class="input-group mt-3">
+                    <span class="input-group-text mr-3">
+                      <i class="bi bi-envelope-at-fill"></i>
+                    </span>
+                  <input type="email" name="email" id="email" class="form-control" placeholder="Enter Email">
+                </div>
+
+                <div class="input-group mt-3">
+                    <span class="input-group-text mr-3">
+                      <i class="bi bi-telephone-fill"></i>
+                    </span>
+                  <input type="text" name="phone" id="phone" class="form-control" placeholder="Enter Phone">
+                </div>
+
+                <div class="input-group mt-3">
+                    <span class="input-group-text mr-3">
+                      <i class="bi bi-briefcase-fill"></i>
+                    </span>
+                  <input type="text" name="work" id="work" class="form-control" placeholder="Enter Work">
+                </div>
+
+                <div class="input-group mt-3">
+                  <textarea name="description" id="description" rows="5" class="form-control" placeholder="Enter contact description"></textarea>
+                </div>
+                <div class="input-group mt-3">
+                    <span class="input-group-text mr-3">
+                      <i class="bi bi-file-earmark-image-fill"></i>
+                    </span>
+                      <input type="file" name="image" id="image" class="form-control">
+                  </div>
+
+              <div class="container text-center mt-3">
+                  <button type="submit" class="btn btn-primary d-block mb-2">Save contact</button>
+              </div>
+
+              </form>
+            </div>
           </div>
-          <h1 class="text-center">add contact</h1>
         </div>
       </div>
     </div>
-
-  </div>
-
-
 </section>
 
 </body>

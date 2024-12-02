@@ -1,4 +1,4 @@
-package com.sahabuddin.contactmanager.helper;
+package com.sahabuddin.contactmanager.utilities;
 
 import lombok.*;
 

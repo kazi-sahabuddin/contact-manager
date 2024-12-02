@@ -1,8 +1,7 @@
 package com.sahabuddin.contactmanager.controllers;
 
 import com.sahabuddin.contactmanager.entities.User;
-import com.sahabuddin.contactmanager.helper.Message;
-import com.sahabuddin.contactmanager.models.requests.SignInRequest;
+import com.sahabuddin.contactmanager.utilities.Message;
 import com.sahabuddin.contactmanager.respositories.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
