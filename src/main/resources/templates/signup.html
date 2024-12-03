@@ -10,8 +10,9 @@
         <div class="row">
             <div class="col-md-8 offset-md-2">
                 <div class="my-card">
-                    <div th:if="${session.message}"  th:classappend="${session.message.type}" class="alert alert-primary" role="alert">
+                    <div th:if="${session.message}"  th:classappend="${session.message.type}" class="alert alert-primary text-center" role="alert">
                        <span class="text-center" th:text="${session.message.content}"></span>
+                        <th:block th:text="${@sessionUtils.removeAttributeFromSession('message')}"></th:block>
                     </div>
                     <div class="container text-center">
                         <img style="width: 80px" th:src="@{/images/membership.png}"/>

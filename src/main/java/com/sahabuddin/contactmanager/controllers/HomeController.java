@@ -1,7 +1,7 @@
 package com.sahabuddin.contactmanager.controllers;
 
 import com.sahabuddin.contactmanager.entities.User;
-import com.sahabuddin.contactmanager.utilities.Message;
+import com.sahabuddin.contactmanager.models.response.Message;
 import com.sahabuddin.contactmanager.respositories.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -12,6 +12,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import static com.sahabuddin.contactmanager.constants.AppConstant.*;
 
 @Slf4j
 @Controller
@@ -24,27 +26,25 @@ public class HomeController {
 
     @GetMapping(value = {"/","/home"})
     public String home(Model model) {
-        model.addAttribute("title", "Home | Contact Manager");
+        model.addAttribute(TITLE, "Home | Contact Manager");
         return "home";
     }
 
     @GetMapping(value = "/about")
     public String about(Model model) {
-        model.addAttribute("title", "About | Contact Manager");
+        model.addAttribute(TITLE, "About | Contact Manager");
         return "about";
     }
 
     @GetMapping(value = "/signup")
-    public String signup(Model model, HttpSession session) {
-        session.removeAttribute("message");
-        model.addAttribute("title", "Sign up | Contact Manager");
+    public String signup(Model model) {
+        model.addAttribute(TITLE, SIGN_UP_TITLE);
         model.addAttribute("user", new User());
-        return "signup";
+        return SIGN_UP_PAGE;
     }
 
     @PostMapping(value = "/signup")
     public String userSignup(@Valid @ModelAttribute("user") User user,BindingResult result, @RequestParam(value = "agreement", defaultValue = "false") boolean agreement,  Model model, HttpSession session) {
-        session.removeAttribute("message");
         try{
             if (!agreement) {
                 log.error("You have not agreed the terms and conditions");
@@ -52,14 +52,13 @@ public class HomeController {
             }
 
             if (result.hasErrors()) {
-                log.error("Error: {}", result.toString());
-                model.addAttribute("title", "Sign up | Contact Manager");
+                log.error("Error: {}", result);
+                model.addAttribute(TITLE, SIGN_UP_TITLE);
                 model.addAttribute("user", user);
-                model.addAttribute("isAgreed", agreement);
-                return "signup";
+                return SIGN_UP_PAGE;
             }
 
-            model.addAttribute("title", "Sign up | Contact Manager");
+            model.addAttribute(TITLE, SIGN_UP_TITLE);
             user.setRole("ROLE_USER");
             user.setEnabled(true);
             user.setImageUrl("default.png");
@@ -67,8 +66,7 @@ public class HomeController {
             log.info("User: {}", user);
             User saved = userRepository.save(user);
             log.info("User registered successfully {}", saved);
-            log.info("user info: {}", user.toString());
-            log.info("agreement: {}", agreement);
+            log.info("user info: {}", user);
 
             model.addAttribute("user", new User());
             session.setAttribute("message", new Message("Registration successfully! ", "alert-success"));
@@ -80,25 +78,12 @@ public class HomeController {
             log.error("error: {}", e.getMessage());
             session.setAttribute("message", new Message("Something went wrong! "+e.getMessage(), "alert-danger"));
         }
-        return "signup";
+        return SIGN_UP_PAGE;
     }
 
     @GetMapping(value = "/sign-in")
     public String singIn(Model model){
-        model.addAttribute("title", "Login | Contact Manager");
+        model.addAttribute(TITLE, "Login | Contact Manager");
         return "login";
     }
-
-//    @PostMapping(value = "/sign-in")
-//    public String signInPost(@Valid @ModelAttribute("signInRequest") SignInRequest signInRequest, BindingResult result, Model model, HttpSession session ) {
-//        session.removeAttribute("message");
-//        if (result.hasErrors()) {
-//            return "login";
-//        }
-//        log.info("Sign in request: {}", signInRequest);
-//        model.addAttribute("title", "Login | Contact Manager");
-//        model.addAttribute("signInRequest", new SignInRequest());
-//        return "login";
-//
-//    }
 }

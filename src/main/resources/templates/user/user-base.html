@@ -43,7 +43,7 @@
     <span onclick="toggleSidebar()" class="crossBtn">&times;</span>
 
     <a href="#" th:href="@{/user/index}" class="item"> <i class="bi bi-house-fill"></i> Home</a>
-    <a href="#" class="item"> <i class="bi bi-journal-text"></i> View Contacts</a>
+    <a href="#" th:href="@{/user/view-contacts}"class="item"> <i class="bi bi-journal-text"></i> View Contacts</a>
     <a href="#" th:href="@{/user/add-contact}" class="item"> <i class="bi bi-plus-circle-fill"></i> Add Contact</a>
     <a href="#" class="item"> <i class="bi bi-pencil-square"></i> Update Contact</a>
     <a href="#" class="item"> <i class="bi bi-person-circle"></i> Your Profile</a>
@@ -63,6 +63,9 @@
 
 <div class="content mt-5">
     <i onclick="toggleSidebar()" style="font-size: 36px;cursor: pointer" class="bi bi-list"></i>
+    <div th:if="${message}"  th:classappend="${message.type}" class="alert alert-primary text-center" role="alert">
+        <span class="text-center" th:text="${message.content}"></span>
+    </div>
     <div th:replace="${content}"></div>
 </div>
 

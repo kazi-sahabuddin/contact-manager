@@ -1,13 +1,15 @@
-package com.sahabuddin.contactmanager.utilities;
+package com.sahabuddin.contactmanager.models.response;
 
 import lombok.*;
+
+import java.io.Serializable;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class Message {
+public class Message implements Serializable {
 
     private String content;
     private String type;

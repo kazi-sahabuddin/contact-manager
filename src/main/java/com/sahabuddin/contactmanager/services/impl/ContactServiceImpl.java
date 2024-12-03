@@ -38,6 +38,16 @@ public class ContactServiceImpl implements ContactService {
             String relativePath = appProperties.getFilePath();
             log.info("path: {}", relativePath);
             Path path = Paths.get(relativePath + File.separator + file.getOriginalFilename());
+            File fileNew = new File(String.valueOf(path));
+            File directory = fileNew.getParentFile();
+
+            if (directory != null && !directory.exists()) {
+                if (directory.mkdirs()) {
+                    log.info("Directory created successfully.");
+                } else {
+                    log.info("Failed to create directory.");
+                }
+            }
             Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
 
         }

@@ -4,6 +4,7 @@ import com.sahabuddin.contactmanager.entities.User;
 import com.sahabuddin.contactmanager.models.requests.ContactRequest;
 import com.sahabuddin.contactmanager.respositories.UserRepository;
 import com.sahabuddin.contactmanager.services.ContactService;
+import com.sahabuddin.contactmanager.models.response.Message;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +14,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.security.Principal;
 
 import static com.sahabuddin.contactmanager.constants.AppConstant.TITLE;
@@ -49,12 +49,24 @@ public class UserController {
     }
 
     @PostMapping(value = "/add-contact")
-    public String addContactSave(@Valid @ModelAttribute("contact") ContactRequest request, BindingResult result, @RequestParam("imageFile")MultipartFile file, Model model, Principal principal) throws IOException {
+    public String addContactSave(@Valid @ModelAttribute("contact") ContactRequest request, BindingResult result, @RequestParam("imageFile")MultipartFile file, Model model, Principal principal) {
         model.addAttribute(TITLE, "Add Contact | Contact Manager");
         log.info("add contact request is {}", request);
-        contactService.createContact(request, getUser(principal), file);
+        try{
+            contactService.createContact(request, getUser(principal), file);
+            model.addAttribute("message", new Message("Contact added successfully! ", "alert-success"));
+        } catch (Exception e) {
+            model.addAttribute("message", new Message("Something went wrong "+e.getMessage(), "alert-danger"));
+        }
         model.addAttribute("contact", new ContactRequest());
+
         return "user/add_contact";
+    }
+
+    @GetMapping(value = "/view-contacts")
+    public String viewContacts(Model model) {
+        model.addAttribute(TITLE, "View Contact | Contact Manager");
+        return "user/view_contacts";
     }
 
     private User getUser( Principal principal) {
