@@ -6,7 +6,36 @@
 </head>
 <body>
 <section>
-  <h1>view all contacts</h1>
+  <div class="card">
+    <div class="card-body">
+      <h1 class="text-center card-title">Your Contacts</h1>
+      <table class="table table-striped">
+        <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Name</th>
+          <th scope="col">Email</th>
+          <th scope="col">Phone</th>
+          <th scope="col">Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="item,index:${data}">
+          <th scope="row" th:text="${index.index + 1}">1</th>
+          <td><span th:text="${item.name}"></span>(<span th:text="${item.nickName}"></span>)</td>
+          <td th:text="${item.email}">Otto</td>
+          <td th:text="${item.phone}">@mdo</td>
+          <td>
+            <button title="view" class="btn btn-outline-info"><i class="bi bi-card-text"></i></button>
+            <button title="update" class="btn btn-outline-warning"><i class="bi bi-pencil-square"></i></button>
+            <button title="delete" class="btn btn-outline-danger"><i class="bi bi-trash3-fill"></i></button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+
+    </div>
+  </div>
 
 </section>
 

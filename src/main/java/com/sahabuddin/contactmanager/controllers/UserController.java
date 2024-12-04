@@ -64,8 +64,10 @@ public class UserController {
     }
 
     @GetMapping(value = "/view-contacts")
-    public String viewContacts(Model model) {
+    public String viewContacts(Model model, Principal principal) {
         model.addAttribute(TITLE, "View Contact | Contact Manager");
+        model.addAttribute("data", contactService.getAllContactByUser(getUser(principal)));
+
         return "user/view_contacts";
     }
 

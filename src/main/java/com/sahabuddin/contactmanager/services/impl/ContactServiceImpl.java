@@ -18,6 +18,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -64,5 +65,10 @@ public class ContactServiceImpl implements ContactService {
         userRepository.save(user);
         return savedContact;
 
+    }
+
+    @Override
+    public List<Contact> getAllContactByUser(User user) {
+        return contactRepository.findAllByUser(user);
     }
 }
