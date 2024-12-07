@@ -1,5 +1,6 @@
 package com.sahabuddin.contactmanager.controllers;
 
+import com.sahabuddin.contactmanager.entities.Contact;
 import com.sahabuddin.contactmanager.entities.User;
 import com.sahabuddin.contactmanager.models.requests.ContactRequest;
 import com.sahabuddin.contactmanager.respositories.UserRepository;
@@ -8,6 +9,9 @@ import com.sahabuddin.contactmanager.models.response.Message;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,7 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
 
-import static com.sahabuddin.contactmanager.constants.AppConstant.TITLE;
+import static com.sahabuddin.contactmanager.constants.AppConstant.*;
 
 @Slf4j
 @Controller
@@ -64,10 +68,19 @@ public class UserController {
     }
 
     @GetMapping(value = "/view-contacts")
-    public String viewContacts(Model model, Principal principal) {
-        model.addAttribute(TITLE, "View Contact | Contact Manager");
-        model.addAttribute("data", contactService.getAllContactByUser(getUser(principal)));
+    public String viewContacts(
+            @RequestParam(value = PAGE_NO, required = false, defaultValue = PAGE) int pageNo,
+            @RequestParam(value = PAGE_SIZE, required = false, defaultValue = SIZE) int pageSize,
+            Model model, Principal principal) {
 
+
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+         Page<Contact> pages = contactService.getAllContactByUser(getUser(principal), pageable);
+        model.addAttribute(TITLE, "View Contact | Contact Manager");
+        model.addAttribute("dataList",pages );
+        model.addAttribute("currentPage", pageNo);
+        model.addAttribute("pageSize", pageSize);
+        model.addAttribute("totalPage", pages.getTotalPages());
         return "user/view_contacts";
     }
 

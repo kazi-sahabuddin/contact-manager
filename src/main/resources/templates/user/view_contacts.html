@@ -20,11 +20,11 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="item,index:${data}">
+        <tr th:each="data,index:${dataList}">
           <th scope="row" th:text="${index.index + 1}">1</th>
-          <td><span th:text="${item.name}"></span>(<span th:text="${item.nickName}"></span>)</td>
-          <td th:text="${item.email}">Otto</td>
-          <td th:text="${item.phone}">@mdo</td>
+          <td><span th:text="${data.name}"></span>(<span th:text="${data.nickName}"></span>)</td>
+          <td th:text="${data.email}">Otto</td>
+          <td th:text="${data.phone}">@mdo</td>
           <td>
             <button title="view" class="btn btn-outline-info"><i class="bi bi-card-text"></i></button>
             <button title="update" class="btn btn-outline-warning"><i class="bi bi-pencil-square"></i></button>
@@ -36,14 +36,13 @@
 
       <nav aria-label="Page navigation example">
         <ul class="pagination justify-content-center">
-          <li class="page-item disabled">
-            <a class="page-link">Previous</a>
+          <li class="page-item" th:classappend="${currentPage == 0?'disabled':''}">
+            <a class="page-link" th:href="@{'/user/view-contacts?pageNo='+(${currentPage}-1)+'&pageSize='+${pageSize}}">Previous</a>
           </li>
-          <li class="page-item"><a class="page-link" href="#">1</a></li>
-          <li class="page-item"><a class="page-link" href="#">2</a></li>
-          <li class="page-item"><a class="page-link" href="#">3</a></li>
-          <li class="page-item">
-            <a class="page-link" href="#">Next</a>
+          <li class="page-item"  th:each="i: ${#numbers.sequence(1,totalPage)}" th:classappend="${1+currentPage==i?'active':''}"><a class="page-link" th:href="@{'/user/view-contacts?pageNo='+(${i}-1)+'&pageSize='+${pageSize}}"><span th:text="${i}"></span></a></li>
+
+          <li class="page-item" th:classappend="${currentPage+1 == totalPage?'disabled':''}">
+            <a class="page-link" th:href="@{'/user/view-contacts?pageNo='+${currentPage+1}+'&pageSize='+${pageSize}}">Next</a>
           </li>
         </ul>
       </nav>

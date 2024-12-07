@@ -9,6 +9,8 @@ import com.sahabuddin.contactmanager.respositories.UserRepository;
 import com.sahabuddin.contactmanager.services.ContactService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -68,7 +70,7 @@ public class ContactServiceImpl implements ContactService {
     }
 
     @Override
-    public List<Contact> getAllContactByUser(User user) {
-        return contactRepository.findAllByUser(user);
+    public Page<Contact> getAllContactByUser(User user, Pageable pageable) {
+        return contactRepository.findAllByUser(user, pageable);
     }
 }
