@@ -14,4 +14,6 @@ public interface ContactService {
     Contact createContact(ContactRequest request, User user, MultipartFile file) throws IOException;
 
     Page<Contact> getAllContactByUser(User user, Pageable pageable);
+
+    Contact getContactById(Long id);
 }

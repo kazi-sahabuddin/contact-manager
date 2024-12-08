@@ -1,5 +1,6 @@
 package com.sahabuddin.contactmanager.controllers;
 
+import com.sahabuddin.contactmanager.configs.AppProperties;
 import com.sahabuddin.contactmanager.entities.Contact;
 import com.sahabuddin.contactmanager.entities.User;
 import com.sahabuddin.contactmanager.models.requests.ContactRequest;
@@ -31,6 +32,8 @@ public class UserController {
     private final UserRepository userRepository;
 
     private final ContactService contactService;
+
+    private final AppProperties appProperties;
 
     @ModelAttribute
     public void commonAttributes(Model model, Principal principal) {
@@ -72,8 +75,6 @@ public class UserController {
             @RequestParam(value = PAGE_NO, required = false, defaultValue = PAGE) int pageNo,
             @RequestParam(value = PAGE_SIZE, required = false, defaultValue = SIZE) int pageSize,
             Model model, Principal principal) {
-
-
         Pageable pageable = PageRequest.of(pageNo, pageSize);
          Page<Contact> pages = contactService.getAllContactByUser(getUser(principal), pageable);
         model.addAttribute(TITLE, "View Contact | Contact Manager");
@@ -81,7 +82,18 @@ public class UserController {
         model.addAttribute("currentPage", pageNo);
         model.addAttribute("pageSize", pageSize);
         model.addAttribute("totalPage", pages.getTotalPages());
+        model.addAttribute("imageBasePath", appProperties.getFilePath());
         return "user/view_contacts";
+    }
+
+    @GetMapping(value = "/{id}/contact")
+    public String detailsContact(@PathVariable Long id, Model model, Principal principal) {
+
+        Contact contact = contactService.getContactById(id);
+        model.addAttribute(TITLE, "View Contact | Contact Manager");
+        model.addAttribute("contact",contact );
+
+        return "user/details_contact";
     }
 
     private User getUser( Principal principal) {

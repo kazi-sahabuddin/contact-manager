@@ -9,6 +9,8 @@ import com.sahabuddin.contactmanager.respositories.UserRepository;
 import com.sahabuddin.contactmanager.services.ContactService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.aspectj.apache.bcel.util.ClassPath;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -38,9 +40,9 @@ public class ContactServiceImpl implements ContactService {
         Contact contact = new Contact();
         if (!file.isEmpty()){
             contact.setImageUrl(file.getOriginalFilename());
-            String relativePath = appProperties.getFilePath();
-            log.info("path: {}", relativePath);
-            Path path = Paths.get(relativePath + File.separator + file.getOriginalFilename());
+            File savedFile = new ClassPathResource("static/uploaded").getFile();
+            log.info("path: {}", savedFile);
+            Path path = Paths.get(savedFile + File.separator + file.getOriginalFilename());
             File fileNew = new File(String.valueOf(path));
             File directory = fileNew.getParentFile();
 
@@ -53,6 +55,8 @@ public class ContactServiceImpl implements ContactService {
             }
             Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
 
+        }else{
+            contact.setImageUrl("contact.png");
         }
 
         contact.setEmail(request.getEmail());
@@ -72,5 +76,10 @@ public class ContactServiceImpl implements ContactService {
     @Override
     public Page<Contact> getAllContactByUser(User user, Pageable pageable) {
         return contactRepository.findAllByUser(user, pageable);
+    }
+
+    @Override
+    public Contact getContactById(Long id) {
+        return contactRepository.findById(id).orElse(null);
     }
 }

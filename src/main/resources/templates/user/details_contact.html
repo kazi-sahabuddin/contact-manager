@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{user/user-base::layout(~{::section})}">
+<head>
+  <meta charset="UTF-8">
+  <title>details contacts </title>
+</head>
+<body>
+<section>
+  <div class="card mx-auto" >
+    <div class="card-header bg-primary text-white text-center">
+      <h5 th:text="${contact.name}+' details'">User Details</h5>
+    </div>
+    <div class="card-body text-center">
+      <img style="object-fit: cover;width: 200px;height: 200px" th:src="${'/uploaded/'+contact.imageUrl}" class="rounded-circle mb-3" alt="User Avatar">
+      <h5 class="card-title" ><span th:text="${contact.name}"></span> (<span th:text="${contact.nickName}"></span>)</h5>
+      <p class="mb-1"><strong>Email:</strong> <span th:text="${contact.email}"></span></p>
+      <p class="mb-1"><strong>Phone:</strong> <span th:text="${contact.phone}"></span></p>
+      <p class="mb-1"><strong>Work:</strong> <span th:text="${contact.work}"></span></p>
+      <p class="mb-1"><strong>Description:</strong> <span th:text="${contact.description}"></span></p>
+    </div>
+    <div class="card-footer text-center">
+      <button class="btn btn-primary">Update</button>
+      <button class="btn btn-danger">Delete</button>
+    </div>
+  </div>
+
+</section>
+
+</body>
+</html>
