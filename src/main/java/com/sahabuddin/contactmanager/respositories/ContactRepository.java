@@ -11,4 +11,6 @@ import org.springframework.stereotype.Repository;
 public interface ContactRepository extends JpaRepository<Contact, Long> {
 
     Page<Contact> findAllByUser(User user, Pageable pageable);
+
+    Contact findByIdAndUser(Long id, User user);
 }

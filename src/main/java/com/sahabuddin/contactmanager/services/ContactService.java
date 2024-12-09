@@ -16,4 +16,8 @@ public interface ContactService {
     Page<Contact> getAllContactByUser(User user, Pageable pageable);
 
     Contact getContactById(Long id);
+
+    Contact getContactByIdAndUser(Long id, User user);
+
+    void deleteContactByIdAndUser(Long id, User user);
 }

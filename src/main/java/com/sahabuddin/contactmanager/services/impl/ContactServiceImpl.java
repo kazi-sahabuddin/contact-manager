@@ -82,4 +82,32 @@ public class ContactServiceImpl implements ContactService {
     public Contact getContactById(Long id) {
         return contactRepository.findById(id).orElse(null);
     }
+
+    @Override
+    public Contact getContactByIdAndUser(Long id, User user) {
+        return contactRepository.findByIdAndUser(id, user);
+    }
+
+    @Override
+    public void deleteContactByIdAndUser(Long id, User user) {
+        Contact contact = contactRepository.findByIdAndUser(id, user);
+        user.getContacts().remove(contact);
+        userRepository.save(user);
+        contact.setUser(null);
+        try {
+            if(!contact.getImageUrl().equals("contact.png")){
+                File file = new ClassPathResource("static/uploaded").getFile();
+                Path path = Paths.get(file + File.separator + contact.getImageUrl());
+                if (Files.exists(path)) {
+                    Files.delete(path);  // Delete the file
+                    log.info("File deleted successfully.");
+                } else {
+                    log.warn("File not found: {}", path);
+                }
+            }
+        } catch (Exception e){
+            log.error(e.getMessage());
+        }
+        contactRepository.delete(contact);
+    }
 }

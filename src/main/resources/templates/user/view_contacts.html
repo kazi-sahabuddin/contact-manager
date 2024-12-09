@@ -32,7 +32,7 @@
           <td>
             <a title="view" th:href="@{'/user/'+${data.id}+'/contact'}" class="btn btn-outline-info"><i class="bi bi-card-text"></i></a>
             <button title="update" class="btn btn-outline-warning"><i class="bi bi-pencil-square"></i></button>
-            <button title="delete" class="btn btn-outline-danger"><i class="bi bi-trash3-fill"></i></button>
+            <button title="delete" th:onclick="|deleteContact(${data.id})|" class="btn btn-outline-danger"><i class="bi bi-trash3-fill"></i></button>
           </td>
         </tr>
         </tbody>

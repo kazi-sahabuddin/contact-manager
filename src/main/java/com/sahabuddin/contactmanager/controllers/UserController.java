@@ -89,11 +89,18 @@ public class UserController {
     @GetMapping(value = "/{id}/contact")
     public String detailsContact(@PathVariable Long id, Model model, Principal principal) {
 
-        Contact contact = contactService.getContactById(id);
         model.addAttribute(TITLE, "View Contact | Contact Manager");
-        model.addAttribute("contact",contact );
-
+        model.addAttribute("contact",contactService.getContactByIdAndUser(id,getUser(principal)));
         return "user/details_contact";
+    }
+
+    @GetMapping(value = "delete/{id}/contact")
+    public String deleteContact(@PathVariable Long id, Model model, Principal principal) {
+
+        contactService.deleteContactByIdAndUser(id,getUser(principal));
+        model.addAttribute(TITLE, "View Contact | Contact Manager");
+        model.addAttribute("message", new Message("Contact deleted successfully! ", "alert-success"));
+        return "redirect:/user/view-contacts";
     }
 
     private User getUser( Principal principal) {
