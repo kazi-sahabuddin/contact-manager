@@ -20,4 +20,6 @@ public interface ContactService {
     Contact getContactByIdAndUser(Long id, User user);
 
     void deleteContactByIdAndUser(Long id, User user);
+
+    void updateContact(ContactRequest request, User user, MultipartFile file);
 }

@@ -51,7 +51,7 @@ public class UserController {
     @GetMapping(value = "/add-contact")
     public String addContactView(Model model) {
         model.addAttribute(TITLE, "Add Contact | Contact Manager");
-        model.addAttribute("contact", new ContactRequest());
+        model.addAttribute(CONTACT, new ContactRequest());
         return "user/add_contact";
     }
 
@@ -61,11 +61,11 @@ public class UserController {
         log.info("add contact request is {}", request);
         try{
             contactService.createContact(request, getUser(principal), file);
-            model.addAttribute("message", new Message("Contact added successfully! ", "alert-success"));
+            model.addAttribute(MESSAGE, new Message("Contact added successfully! ", "alert-success"));
         } catch (Exception e) {
-            model.addAttribute("message", new Message("Something went wrong "+e.getMessage(), "alert-danger"));
+            model.addAttribute(MESSAGE, new Message("Something went wrong "+e.getMessage(), "alert-danger"));
         }
-        model.addAttribute("contact", new ContactRequest());
+        model.addAttribute(MESSAGE, new ContactRequest());
 
         return "user/add_contact";
     }
@@ -90,7 +90,7 @@ public class UserController {
     public String detailsContact(@PathVariable Long id, Model model, Principal principal) {
 
         model.addAttribute(TITLE, "View Contact | Contact Manager");
-        model.addAttribute("contact",contactService.getContactByIdAndUser(id,getUser(principal)));
+        model.addAttribute(CONTACT,contactService.getContactByIdAndUser(id,getUser(principal)));
         return "user/details_contact";
     }
 
@@ -99,7 +99,27 @@ public class UserController {
 
         contactService.deleteContactByIdAndUser(id,getUser(principal));
         model.addAttribute(TITLE, "View Contact | Contact Manager");
-        model.addAttribute("message", new Message("Contact deleted successfully! ", "alert-success"));
+        model.addAttribute(MESSAGE, new Message("Contact deleted successfully! ", "alert-success"));
+        return "redirect:/user/view-contacts";
+    }
+
+    @GetMapping(value = "update/{id}/contact")
+    public String updateGetContact(@PathVariable Long id, Model model, Principal principal) {
+        model.addAttribute(TITLE, "Update Contact | Contact Manager");
+        model.addAttribute(CONTACT, contactService.getContactByIdAndUser(id,getUser(principal)));
+        model.addAttribute("updateRequest", new ContactRequest());
+        return "user/update_contact";
+    }
+
+    @PostMapping(value = "update/contact")
+    public String updatePostContact(@ModelAttribute("updateRequest") ContactRequest request,@RequestParam("imageFile")MultipartFile file, Model model, Principal principal) {
+        model.addAttribute(MESSAGE, new Message("Contact updated successfully! ", "alert-success"));
+        log.info("update contact request is {}", request);
+        try{
+            contactService.updateContact(request, getUser(principal), file);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
         return "redirect:/user/view-contacts";
     }
 

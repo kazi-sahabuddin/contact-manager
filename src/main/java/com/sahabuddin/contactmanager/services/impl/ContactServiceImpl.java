@@ -1,6 +1,5 @@
 package com.sahabuddin.contactmanager.services.impl;
 
-import com.sahabuddin.contactmanager.configs.AppProperties;
 import com.sahabuddin.contactmanager.entities.Contact;
 import com.sahabuddin.contactmanager.entities.User;
 import com.sahabuddin.contactmanager.models.requests.ContactRequest;
@@ -9,7 +8,6 @@ import com.sahabuddin.contactmanager.respositories.UserRepository;
 import com.sahabuddin.contactmanager.services.ContactService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.aspectj.apache.bcel.util.ClassPath;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,7 +20,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.List;
 
 @Slf4j
 @Service
@@ -33,28 +30,12 @@ public class ContactServiceImpl implements ContactService {
 
     private final UserRepository userRepository;
 
-    private final AppProperties appProperties;
-
     @Override
-    public Contact createContact(ContactRequest request, User user, MultipartFile file) throws IOException {
+    public Contact createContact(ContactRequest request, User user, MultipartFile file) {
         Contact contact = new Contact();
         if (!file.isEmpty()){
+            uploadFile(file);
             contact.setImageUrl(file.getOriginalFilename());
-            File savedFile = new ClassPathResource("static/uploaded").getFile();
-            log.info("path: {}", savedFile);
-            Path path = Paths.get(savedFile + File.separator + file.getOriginalFilename());
-            File fileNew = new File(String.valueOf(path));
-            File directory = fileNew.getParentFile();
-
-            if (directory != null && !directory.exists()) {
-                if (directory.mkdirs()) {
-                    log.info("Directory created successfully.");
-                } else {
-                    log.info("Failed to create directory.");
-                }
-            }
-            Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
-
         }else{
             contact.setImageUrl("contact.png");
         }
@@ -94,10 +75,40 @@ public class ContactServiceImpl implements ContactService {
         user.getContacts().remove(contact);
         userRepository.save(user);
         contact.setUser(null);
+        deleteFileByFileName(contact.getImageUrl());
+        contactRepository.delete(contact);
+    }
+
+    @Override
+    public void updateContact(ContactRequest request, User user, MultipartFile file) {
+
+        Contact contact = contactRepository.findByIdAndUser(request.getId(), user);
+        try{
+            if (!file.isEmpty()){
+               deleteFileByFileName(contact.getImageUrl());
+               uploadFile(file);
+               contact.setImageUrl(file.getOriginalFilename());
+            }
+        } catch (Exception e){
+            log.error(e.getMessage());
+        }
+
+        contact.setEmail(request.getEmail());
+        contact.setName(request.getName());
+        contact.setNickName(request.getNickName());
+        contact.setPhone(request.getPhone());
+        contact.setDescription(request.getDescription());
+        contact.setWork(request.getWork());
+        contactRepository.save(contact);
+
+
+    }
+
+    private void deleteFileByFileName(String fileName) {
         try {
-            if(!contact.getImageUrl().equals("contact.png")){
+            if (!fileName.equals("contact.png")) {
                 File file = new ClassPathResource("static/uploaded").getFile();
-                Path path = Paths.get(file + File.separator + contact.getImageUrl());
+                Path path = Paths.get(file + File.separator + fileName);
                 if (Files.exists(path)) {
                     Files.delete(path);  // Delete the file
                     log.info("File deleted successfully.");
@@ -108,6 +119,27 @@ public class ContactServiceImpl implements ContactService {
         } catch (Exception e){
             log.error(e.getMessage());
         }
-        contactRepository.delete(contact);
+    }
+
+    private void uploadFile(MultipartFile file){
+        try {
+            File savedFile = new ClassPathResource("static/uploaded").getFile();
+            log.info("path: {}", savedFile);
+            Path path = Paths.get(savedFile + File.separator + file.getOriginalFilename());
+            File fileNew = new File(String.valueOf(path));
+            File directory = fileNew.getParentFile();
+
+            if (directory != null && !directory.exists()) {
+                if (directory.mkdirs()) {
+                    log.info("Directory created successfully.");
+                } else {
+                    log.info("Failed to create directory.");
+                }
+            }
+            Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            log.error(e.getMessage());
+        }
+
     }
 }

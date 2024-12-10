@@ -10,6 +10,8 @@ public final class AppConstant {
     public static final String SIGN_UP_PAGE = "signup";
 
     public static final String TITLE = "title";
+    public static final String MESSAGE = "message";
+    public static final String CONTACT = "contact";
     public static final String SIGN_UP_TITLE = "Sign up | Contact Manager";
 
     public static final String PAGE_NO = "pageNo";

@@ -19,8 +19,8 @@
       <p class="mb-1"><strong>Description:</strong> <span th:text="${contact.description}"></span></p>
     </div>
     <div class="card-footer text-center">
-      <button class="btn btn-primary">Update</button>
-      <button class="btn btn-danger">Delete</button>
+      <a th:href="@{'/user/update/'+${contact.id}+'/contact'}" class="btn btn-primary">Update</a>
+      <button th:onclick="|deleteContact(${contact.id})|" class="btn btn-danger">Delete</button>
     </div>
   </div>
 
