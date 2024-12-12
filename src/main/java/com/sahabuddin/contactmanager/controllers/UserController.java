@@ -123,6 +123,13 @@ public class UserController {
         return "redirect:/user/view-contacts";
     }
 
+    @GetMapping(value = "me")
+    String getMe(Model model, Principal principal) {
+        model.addAttribute(TITLE, "Me | Contact Manager");
+        model.addAttribute("me", getUser(principal));
+        return "user/me";
+    }
+
     private User getUser( Principal principal) {
         return userRepository.findByEmail(principal.getName());
     }
