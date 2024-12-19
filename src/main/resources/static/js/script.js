@@ -1,5 +1,3 @@
-console.log("this is the script file");
-
 const toggleSidebar = () => {
     if ($(".sidebar").is(":visible")){
         $(".sidebar").css("display", "none");
@@ -35,4 +33,25 @@ function deleteContact(id){
             });
         }
     });
+}
+
+const search = () => {
+    const query = document.getElementById("search-input").value;
+    if (query.length > 0){
+        let url = window.location.origin+'/user/search/'+query;
+        fetch(url).then(response => {
+            return response.json();
+        }).then(data => {
+            let text = `<div class='list-group'>`;
+            data.forEach((contact) => {
+                text += `<a href='/user/${contact.id}/contact' class='list-group-item list-group-item-action'>${contact.name} </a>`;
+            });
+            text+= `</div>`;
+            $('.search-result').html(text);
+            $('.search-result').show();
+        })
+    }else {
+        $('.search-result').hide()
+    }
+
 }

@@ -72,3 +72,15 @@ body{
 .content{
     margin-left: 20%;
 }
+
+.search-container{
+    position: relative;
+}
+.search-result {
+    position: absolute;
+    width: 100%;
+    background: white;
+    padding: 10px;
+    border: 1px solid #e2e2e2;
+    display: none;
+}

@@ -20,6 +20,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -102,6 +103,11 @@ public class ContactServiceImpl implements ContactService {
         contactRepository.save(contact);
 
 
+    }
+
+    @Override
+    public List<Contact> searchByName(String query, User user) {
+        return contactRepository.findByNameContainingIgnoreCaseAndUser(query, user);
     }
 
     private void deleteFileByFileName(String fileName) {

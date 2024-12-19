@@ -1,5 +1,6 @@
 package com.sahabuddin.contactmanager.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -28,6 +29,7 @@ public class Contact {
     private String imageUrl;
 
     @ManyToOne
+    @JsonIgnore
     private User user;
 
 }
