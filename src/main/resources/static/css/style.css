@@ -84,3 +84,11 @@ body{
     border: 1px solid #e2e2e2;
     display: none;
 }
+
+.active-menu{
+    background: #0d6efd;
+    color: white !important;
+}
+.active-menu:hover{
+    color: gray !important;
+}

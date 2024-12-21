@@ -7,12 +7,14 @@ import com.sahabuddin.contactmanager.models.requests.ContactRequest;
 import com.sahabuddin.contactmanager.respositories.UserRepository;
 import com.sahabuddin.contactmanager.services.ContactService;
 import com.sahabuddin.contactmanager.models.response.Message;
+import com.sahabuddin.contactmanager.services.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -34,6 +36,10 @@ public class UserController {
     private final ContactService contactService;
 
     private final AppProperties appProperties;
+
+    private final PasswordEncoder passwordEncoder;
+
+    private final UserService userService;
 
     @ModelAttribute
     public void commonAttributes(Model model, Principal principal) {
@@ -124,10 +130,35 @@ public class UserController {
     }
 
     @GetMapping(value = "me")
-    String getMe(Model model, Principal principal) {
+    public String getMe(Model model, Principal principal) {
         model.addAttribute(TITLE, "Me | Contact Manager");
         model.addAttribute("me", getUser(principal));
         return "user/me";
+    }
+
+    @GetMapping(value = "change-password")
+    public String getChangePassword(Model model) {
+        model.addAttribute(TITLE, "Change Password | Contact Manager");
+        return "user/settings";
+
+    }
+
+    @PostMapping(value = "change-password")
+    public String postChangePassword(@RequestParam("oldPassword") String oldPassword,@RequestParam("newPassword") String newPassword, Model model, Principal principal) {
+        model.addAttribute(TITLE, "Change Password | Contact Manager");
+        User user = getUser(principal);
+
+        if (passwordEncoder.matches(oldPassword, user.getPassword())) {
+            userService.passwordChange(oldPassword, newPassword, user);
+            return "redirect:/user/view-contacts";
+
+        } else {
+            model.addAttribute("message", new Message("old password dose not match!", "alert-danger"));
+            return "user/settings";
+        }
+
+
+
     }
 
     private User getUser( Principal principal) {
