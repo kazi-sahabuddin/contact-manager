@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{base::layout(~{::section})}">
+<head>
+    <meta charset="UTF-8">
+    <title>This is login Page</title>
+</head>
+<body>
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <div class="my-card">
+
+                    <div class="container text-center">
+                        <img style="width: 80px" th:src="@{/images/confidental.png}"/>
+                    </div>
+
+                    <h1 class="text-center">OTP Verify</h1>
+                    <form th:action="@{/sign-in}" action="#" method="post">
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+</section>
+
+</body>
+</html>
