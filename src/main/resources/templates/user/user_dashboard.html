@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{user/user-base::layout(~{::section})}">
+<head>
+  <meta charset="UTF-8">
+  <title>This is user dashboard </title>
+</head>
+<body>
+<section>
+
+        <div class="my-card">
+          <div class="container text-center">
+            <img style="width: 80px" th:src="@{/images/profile.png}" alt="user picture"/>
+          </div>
+          <h1 class="text-center">User dashboard</h1>
+        </div>
+
+    <script>
+        $(document).ready(() =>{
+            $(".item").removeClass("active-menu");
+            $("#user-index").addClass("active-menu");
+        });
+    </script>
+
+</section>
+
+</body>
+</html>

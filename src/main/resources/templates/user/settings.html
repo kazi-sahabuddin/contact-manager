@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{user/user-base::layout(~{::section})}">
+<head>
+  <meta charset="UTF-8">
+  <title>Add contact </title>
+</head>
+<body>
+<section>
+    <div class="card">
+      <div class="card-body">
+        <h1 class="text-center card-title">Change your password</h1>
+
+        <div class="container-fluid mt-1">
+          <div class="row">
+            <div class="col-md-10 offset-md-1">
+              <form action="#" class="mt-2" th:action="@{/user/change-password}" method="post">
+                <div class="input-group mt-3">
+                    <span class="input-group-text mr-3">
+                     <i class="bi bi-input-cursor"></i>
+                    </span>
+                  <input type="password" name="oldPassword" class="form-control" placeholder="Enter your old password">
+                </div>
+
+                <div class="input-group mt-3">
+                    <span class="input-group-text mr-3">
+                      <i class="bi bi-input-cursor-text"></i>
+                    </span>
+                  <input type="password" name="newPassword" class="form-control" placeholder="Enter your new password">
+                </div>
+
+              <div class="container text-center mt-3">
+                  <button type="submit" class="btn btn-primary d-block mb-2">Change Password</button>
+              </div>
+
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
+    <script>
+        tinymce.init({
+            selector: '#descriptionn'
+        });
+        $(document).ready(() =>{
+            $(".item").removeClass("active-menu");
+            $("#settings").addClass("active-menu");
+        });
+    </script>
+</section>
+
+</body>
+</html>
